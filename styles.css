@@ -6,6 +6,7 @@ body, html {
     /* display: flex;
     justify-content: center;
     align-items: center; */
+    background-color:#d8e5d8;
     
 }
 
@@ -13,18 +14,26 @@ body, html {
   
     display: grid;
     grid-template-columns: 2fr 2fr 4fr 2fr 2fr;
-    grid-template-rows: 2fr 4fr;
-    /* grid-template-rows: minmax(100px, 1fr) minmax(400px, 4fr); */
-    padding: 50px;
+    grid-template-rows: 2fr 4fr 2fr;
+    /* grid-template-rows: minmax(50px, 2fr) 4fr minmax(50px, 2fr);  */
+    /* padding: 50px; */
+    
   }
   .header{
     grid-column: 1/6;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-
+    align-items: center;
+    background-color:#87b0a8;
+    margin: 0;
+  }
+  h1{
+    font-size: 80px;
+    margin: 0;
   }
   .container > div{
-    /* border: 2px solid; */
+    border: 2px solid;
   }
   table, th, tr{
     /* border: 2px solid black; */
@@ -60,4 +69,14 @@ h3{
     justify-content: center;
     font-size: 30px;
     font-weight: bold;
+}
+.bottom{
+  grid-column: 1/6;
+  display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#declareWinner{
+  font-size: 25px;
+  font-weight: bold;
 }

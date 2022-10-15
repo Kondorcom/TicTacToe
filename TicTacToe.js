@@ -23,52 +23,87 @@ var gameboard = (function() {
     let currentPlayer;
 
     let winnerOneOrTwo = 'I';
+    let restartButton = document.getElementById("restartButton");
+
+    let declareWinner = document.getElementById("declareWinner");
+    declareWinner.innerHTML = ' ';
+    restartButton.addEventListener('click', restartGame);
+    
+    
+    function restartGame(){
+        console.log('restart game');
+        declareWinner.innerHTML = ' ';
+        setBoard();
+    }
+
+    function setBoard(){
+        for (var i=0; i<9; i++){
+            _boardArray[i] = 0;
+            document.getElementById(i).bgColor = '#f8f8f8';
+            document.getElementById(i).innerText = ' ';
+
+        }      
+        winnerOneOrTwo = 'unknown';  
+        drawXO();
+    }
 
     function drawXO(){  
 
         currentPlayer = plOne;
-        plOneArea.style.backgroundColor = 'lightblue';
+        plOneArea.style.backgroundColor = '#717b7a';
 
         for (let i=0; i<9; i++){
-           
+            effectHoverOverCell(i);
+        
               document.getElementById(i).onclick = function(){
                 let selectedCell = document.getElementById(i);
-                // console.log(selectedCell.textContent);
-                if (selectedCell.textContent === ' '){    
+
+                   
+                // console.log('seleted cell',selectedCell.textContent);
+                // console.log('declareWinner',declareWinner.textContent);
+                if (selectedCell.textContent === ' ' && declareWinner.textContent === ' '){   
+                     console.log('declare winner',declareWinner.textContent);
                     selectedCell.textContent = currentPlayer;
                     _boardArray[i] = currentPlayer;
                     // console.log('should write x');
+                    switchPlayerColor();
+                    checkIfWin();
+                    displayWinner();
                 } else {
                     // selectedCell.textContent = ' ';
-                    alert('already played');
+                    // alert('already played');
                     console.log('x should change to empty');
                 }   
-                if (currentPlayer === plOne){
-                    plOneArea.style.backgroundColor = 'white';
-                    plTwoArea.style.backgroundColor = 'lightblue';
-                    currentPlayer = plTwo;
-                }   else {
-                    plTwoArea.style.backgroundColor = 'white';
-                    plOneArea.style.backgroundColor = 'lightblue';
-                    currentPlayer = plOne;
-                }
+                
+                // if (currentPlayer === plOne){
+                //     plOneArea.style.backgroundColor = 'white';
+                //     plTwoArea.style.backgroundColor = 'lightblue';
+                //     currentPlayer = plTwo;
+                // }   else {
+                //     plTwoArea.style.backgroundColor = 'white';
+                //     plOneArea.style.backgroundColor = 'lightblue';
+                //     currentPlayer = plOne;
+                // }
                 // console.log('position on board', i); 
 
-                checkIfWin();
-                if (winnerOneOrTwo === plOne){
-                    playerOneScore ++;
-                    plOneScore.textContent = playerOneScore;
-                    alert('would you like to play again');
-                    setBoard();
-                }   else if (winnerOneOrTwo === plTwo){
-                    playerTwoScore ++;
-                    plTwoScore.textContent = playerTwoScore;
-                    alert('would you like to play again');
-                    setBoard();
-                }   else if(winnerOneOrTwo === draw){
-                    alert('DRAW, would you like to play again');
-                    setBoard();
-                }
+                // checkIfWin();
+                // displayWinner();
+                // if (winnerOneOrTwo === plOne){
+                //     playerOneScore ++;
+                //     plOneScore.textContent = playerOneScore;
+                //     // alert('would you like to play again');
+                //     declareWinner.textContent = 'Winner is ' + plOne;
+                //     // setBoard();
+                // }   else if (winnerOneOrTwo === plTwo){
+                //     playerTwoScore ++;
+                //     plTwoScore.textContent = playerTwoScore;
+                //     declareWinner.textContent = 'Winner is ' + plTwo;
+                //     // alert('would you like to play again');
+                //     // setBoard();
+                // }   else if(winnerOneOrTwo === draw){
+                //     // alert('DRAW, would you like to play again');
+                //     // setBoard();
+                // }
 
                 // if (winnerOneOrTwo === plOne || winnerOneOrTwo === plTwo ){
                     
@@ -83,45 +118,73 @@ var gameboard = (function() {
         }
      
     }  
-   
-    
+    function effectHoverOverCell(i){
+        
+        document.getElementById(i).addEventListener('mouseover', function(){
+            this.style.backgroundColor = '#717b7a';
+            this.style.transitionDelay = '0.05s';
+        });
+        document.getElementById(i).addEventListener('mouseleave', function(){
+            this.style.backgroundColor =  '#f8f8f8';
+            this.style.transitionDelay = '0.05s';
+            
+        });
+    }
+
+        
+        
+    function switchPlayerColor(){
+        if (currentPlayer === plOne){
+            plOneArea.style.backgroundColor = '#d8e5d8';
+            plTwoArea.style.backgroundColor = '#717b7a';
+            currentPlayer = plTwo;
+        }   else {
+            plTwoArea.style.backgroundColor = '#d8e5d8';
+            plOneArea.style.backgroundColor = '#717b7a';
+            currentPlayer = plOne;
+        }
+    }
+
+    function displayWinner(){
+        if (winnerOneOrTwo === plOne){
+            playerOneScore ++;
+            plOneScore.textContent = playerOneScore;
+            // alert('would you like to play again');
+            declareWinner.textContent = 'Winner is ' + plOne;
+            // setBoard();
+        }   else if (winnerOneOrTwo === plTwo){
+            playerTwoScore ++;
+            plTwoScore.textContent = playerTwoScore;
+            declareWinner.textContent = 'Winner is ' + plTwo;
+            // alert('would you like to play again');
+            // setBoard();
+        }   else if(winnerOneOrTwo === draw){
+            // alert('DRAW, would you like to play again');
+            // setBoard();
+        }
+    }    
     function play(){
         let showPlayerOne = document.getElementById('plOne');
         let showPlayerTwo = document.getElementById('plTwo');
-
         showPlayerOne.style.backgroundColor = 'lightblue';
-
-
     }
 
-    function setBoard(){
-        for (var i=0; i<9; i++){
-            _boardArray[i] = 0;
-            document.getElementById(i).bgColor = '#2E8B57';
-            document.getElementById(i).innerText = ' ';
-
-        }      
-        winnerOneOrTwo = 'unknown';  
-        drawXO();
-       
-    }
+   
+    
     function getBoardPosStatus(x){
         console.log(_boardArray[8]);
     }
     function displayAllPositions(){
         for (var i=0;i< 9;i++){
             console.log(i,'===',_boardArray[i]);
-            
         }
     }
     function checkAllPositions(){
         let check = 0;
         // console.log('checkPos');
         for (var i=0;i< 9;i++){
-
             // console.log(i,'===',_boardArray[i]);
             if (_boardArray[i] == ' '){
-                
                 check ++;
             }  
         }
@@ -131,7 +194,6 @@ var gameboard = (function() {
         } else {
             return 0;
         }
-
     }
     let checking = checkAllPositions();
 
@@ -194,15 +256,11 @@ var gameboard = (function() {
              winnerOneOrTwo = draw;
 
         }
-        
-        // console.log(checking);
-        
+        // console.log(checking);  
     }
   
     return {
-      
         setBoard: setBoard,
-        
     };
   })();
   gameboard.setBoard();
@@ -215,16 +273,12 @@ const Player = (name) => {
         const getName  = () => name;
         let playedPositions = [];
         const gamesWon = 0;
-
         const playedPosition = x =>{
             playedPosition[x] = 1;
         }
 
-        
         return {attack, damage, getLevel, getName};
       };
-
-
 
 
 //   const Player = (name) => {
