@@ -1,68 +1,77 @@
-body, html {
+body,
+html {
     height: 100%;
     margin: 0;
     margin-top: 15px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+        sans-serif;
     /* padding: 50px 100px 50px 100px; */
     /* display: flex;
     justify-content: center;
     align-items: center; */
-    background-color:#d8e5d8;
-    overflow: hidden
-    
+    background-color: #d8e5d8;
+    overflow: hidden;
 }
 
-.container{
+.container {
     /* margin: 50px 20% 50px 20%; */
     display: grid;
-    grid-template-columns: 2fr minmax(200px, 1fr) minmax(300px, 1fr) minmax(200px, 1fr) 2fr;
+    grid-template-columns: 2fr minmax(200px, 1fr) minmax(300px, 1fr) minmax(
+            200px,
+            1fr
+        ) 2fr;
 
     grid-template-rows: 2fr 4fr 2fr;
     gap: 15px;
     /* margin-top: 20px; */
     /* grid-template-rows: minmax(50px, 2fr) 4fr minmax(50px, 2fr);  */
     /* padding: 50px; */
-    
-  }
-  .header{
+}
+.header {
     grid-column: 2/5;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color:#87b0a8;
+    background-color: #87b0a8;
     margin: 0;
     border-radius: 15px;
     /* margin: 15px; */
-  }
-  .filler1{
+}
+.filler1 {
     grid-row: 2/3;
-  }
-  h1{
+}
+.filler2 {
+    grid-row: 2/3;
+    /* grid-column: 2/3; */
+}
+h1 {
     font-size: 80px;
     margin: 0;
-  }
-  .container > div{
-    /* border: 2px solid; */
-  }
-  table, th, tr{
+}
+.container > div {
+    border: 2px solid;
+}
+table,
+th,
+tr {
     /* border: 2px solid black; */
     /* border-collapse: collapse; */
     text-align: center;
     border-collapse: separate;
     border-spacing: 2px;
-  }
- 
-    td{
-     
-        border: 2px solid;
-        width: 100px;
-        height: 100px;
-        font-size: 80px;
-        font-weight: bold;
-        border-radius: 15px;
-    }
-.center{
+}
+
+td {
+    border: 2px solid;
+    width: 100px;
+    height: 100px;
+    font-size: 80px;
+    font-weight: bold;
+    border-radius: 15px;
+}
+.center {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -71,48 +80,65 @@ body, html {
     padding: 15px 0px 15px 0px;
     grid-row: 2/3;
 }
-h3{
+h3 {
     display: flex;
     justify-content: center;
     font-size: 40px;
     font-weight: bold;
-    margin: 70px 0px 20px 0px;
-    
+    margin: 20px 0px 20px 0px;
 }
-#plOne, #plTwo{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 40px 0px 40px 0px;
-  border-radius: 15px;
-  grid-row: 2/3;
-  /* justify-content: center; */
+#plOne,
+#plTwo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 40px 0px 40px 0px;
+    border-radius: 15px;
+    grid-row: 2/3;
+    /* justify-content: center; */
 }
 
-#plOneScore, #plTwoScore{
-    /* display: flex;
+#plOneScore,
+#plTwoScore {
+    display: flex;
     align-items: center;
-    justify-content: center; */
+    justify-content: center;
     font-size: 35px;
     font-weight: bold;
 }
-
-.bottom{
-  grid-column: 1/6;
-  display: flex;
-    justify-content: center;
+.playerName {
+    padding: 20px;
+    width: 80%;
+    display: flex;
     align-items: center;
 }
-#declareWinner{
-  font-size: 25px;
-  font-weight: bold;
+#plOneName,
+#plTwoName {
+    padding: 5px;
+    width: 100%;
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: #87b0a8;
+    outline: none;
 }
-#restartButton{
-  font-size: 30px;
-  font-weight: bold;
-  background-color:#87b0a8;
-  border: 2px solid black;
-  border-radius: 10px;
-  padding: 10px 20px 10px 20px;
 
+.bottom {
+    grid-column: 1/6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+#declareWinner {
+    font-size: 25px;
+    font-weight: bold;
+}
+#restartButton,
+#startButton {
+    font-size: 30px;
+    font-weight: bold;
+    background-color: #87b0a8;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px 20px 10px 20px;
 }
