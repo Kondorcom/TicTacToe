@@ -159,6 +159,7 @@ var gameboard = (function() {
             // alert('would you like to play again');
             // setBoard();
         }   else if(winnerOneOrTwo === draw){
+            declareWinner.textContent = 'Draw';
             // alert('DRAW, would you like to play again');
             // setBoard();
         }
