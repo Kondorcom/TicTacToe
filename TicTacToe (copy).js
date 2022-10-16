@@ -16,108 +16,11 @@ const Player = (name, sign) => {
 
     return { setGamesWon, getGamesWon, getName, getSign };
 };
-const drawWinnerLine = () => {
-    var c = document.getElementById("myCanvas");
-
-    var ctx = c.getContext("2d");
-    ctx.lineWidth = 5;
-    // ctx = c.getContext("2d");
-    // ctx.beginPath();
-    // ctx.moveTo(0, 0);
-    // ctx.lineTo(300, 150);
-    // ctx.stroke();
-    // return ctx;
-    const clearCanvas = () => {
-        ctx.clearRect(0, 0, 320, 320);
-        return ctx;
-    };
-    const lineHor02 = () => {
-        ctx.beginPath();
-        ctx.moveTo(0, 53);
-        ctx.lineTo(320, 53);
-        ctx.stroke();
-        console.log("returning ctx");
-        return ctx;
-    };
-    const lineHor35 = () => {
-        ctx.beginPath();
-        ctx.moveTo(0, 159);
-        ctx.lineTo(320, 159);
-        ctx.stroke();
-        console.log("returning ctx");
-        return ctx;
-    };
-    const lineHor68 = () => {
-        ctx.beginPath();
-        ctx.moveTo(0, 267);
-        ctx.lineTo(320, 267);
-        ctx.stroke();
-        console.log("returning ctx");
-        return ctx;
-    };
-    const lineVer06 = () => {
-        ctx.beginPath();
-        ctx.moveTo(53, 0);
-        ctx.lineTo(52, 320);
-        ctx.stroke();
-        console.log("returning ctx");
-        return ctx;
-    };
-    const lineVer17 = () => {
-        ctx.beginPath();
-        ctx.moveTo(159, 0);
-        ctx.lineTo(159, 320);
-        ctx.stroke();
-        console.log("returning ctx");
-        return ctx;
-    };
-    const lineVer28 = () => {
-        ctx.beginPath();
-        ctx.moveTo(267, 0);
-        ctx.lineTo(267, 320);
-        ctx.stroke();
-        console.log("returning ctx");
-        return ctx;
-    };
-    const lineX08 = () => {
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(320, 320);
-        ctx.stroke();
-        console.log("returning ctx");
-        return ctx;
-    };
-    const lineX26 = () => {
-        ctx.beginPath();
-        ctx.moveTo(320, 0);
-        ctx.lineTo(0, 320);
-        ctx.stroke();
-        console.log("returning ctx");
-        return ctx;
-    };
-
-    return {
-        lineHor02,
-        lineHor35,
-        lineHor68,
-        lineVer06,
-        lineVer17,
-        lineVer28,
-        lineX08,
-        lineX26,
-        clearCanvas,
-    };
-};
 
 var gameboard = (function () {
     "use strict";
-    let board = [
-        [" ", " ", " "],
-        [" ", " ", " "],
-        [" ", " ", " "],
-    ];
     const table = document.getElementById("gameBoardTable");
-    let lines = drawWinnerLine();
+
     var _boardArray = [];
 
     let playerOneScore = 0;
@@ -151,8 +54,7 @@ var gameboard = (function () {
     startButton.addEventListener("click", startGame);
 
     function startGame() {
-        table.style.backgroundColor = "#d8e5d8";
-        lines.clearCanvas();
+        // console.log("start or restart game");
         if (startButton.innerHTML === "Start game") {
             let playerXname = document.getElementById("plOneName").value;
             let playerOname = document.getElementById("plTwoName").value;
@@ -173,13 +75,57 @@ var gameboard = (function () {
         }
     }
 
+    // function drawXO(plX, plO) {
+    //     for (var i = 0; i < 9; i++) {
+    //         _boardArray[i] = 0;
+    //         document.getElementById(i).bgColor = "#f8f8f8";
+    //         document.getElementById(i).innerText = " ";
+    //     }
+
+    //     winnerOneOrTwo = "unknown";
+    //     currentPlayer = plOne;
+    //     plOneArea.style.backgroundColor = "#717b7a";
+
+    //     for (let i = 0; i < 9; i++) {
+    //         effectHoverOverCell(i); // when hovering over cell changes color
+
+    //         document.getElementById(i).onclick = function () {
+    //             let selectedCell = document.getElementById(i);
+
+    //             if (
+    //                 selectedCell.textContent === " " &&
+    //                 declareWinner.textContent === " "
+    //             ) {
+    //                 selectedCell.textContent = currentPlayer;
+    //                 _boardArray[i] = currentPlayer;
+    //                 displayAllPositions();
+    //                 switchPlayerColor(); //changes current player
+    //                 checkIfWin(); // goes through the board and makes a check to see if there is a winner
+    //                 let checkWinner = displayWinner();
+    //                 // console.log(displayWinner());
+    //                 if (checkWinner === 1) {
+    //                     plX.setGamesWon();
+    //                 } else if (checkWinner === 2) {
+    //                     plO.setGamesWon();
+    //                 }
+    //                 console.log(plX.getName(), " score ", plX.getGamesWon());
+    //                 console.log(plO.getName(), " score ", plO.getGamesWon());
+    //             } else {
+    //                 console.log("x should change to empty");
+    //             }
+    //         };
+    //         document.getElementById(i).onmouseup = function () {
+    //             console.log("haha mouseup");
+
+    //         };
+    //     }
     function drawXO(plX, plO) {
         for (var i = 0; i < 9; i++) {
             _boardArray[i] = 0;
             document.getElementById(i).bgColor = "#f8f8f8";
             document.getElementById(i).innerText = " ";
         }
-        var checkWinner;
+
         winnerOneOrTwo = "unknown";
         currentPlayer = plOne;
         plOneArea.style.backgroundColor = "#717b7a";
@@ -187,6 +133,7 @@ var gameboard = (function () {
         for (let i = 0; i < 9; i++) {
             let playerUser = 0;
             effectHoverOverCell(i); // when hovering over cell changes color
+
             document.getElementById(i).onmousedown = function () {
                 console.log("on click");
                 let selectedCell = document.getElementById(i);
@@ -195,12 +142,13 @@ var gameboard = (function () {
                     selectedCell.textContent === " " &&
                     declareWinner.textContent === " "
                 ) {
+                    // console.log("current player ", currentPlayer);
                     selectedCell.textContent = currentPlayer;
                     _boardArray[i] = currentPlayer;
                     // displayAllPositions();
-                    switchPlayerColorAndCurrentPlayer(); //changes current player
+                    switchPlayerColor(); //changes current player
                     checkIfWin(); // goes through the board and makes a check to see if there is a winner
-                    checkWinner = displayWinner();
+                    let checkWinner = displayWinner();
                     // console.log(displayWinner());
                     if (checkWinner === 1) {
                         plX.setGamesWon();
@@ -220,34 +168,39 @@ var gameboard = (function () {
                     if (playerUser != 1) {
                         console.log("mouseup player user", playerUser);
                         console.log("mouseup");
+                        let randomNumber = randomPlayer();
+                        let checkWinner2 = displayWinner();
                         if (
-                            checkWinner != 1 &&
-                            checkWinner != 2 &&
-                            checkWinner != 0
+                            checkWinner2 != 1 &&
+                            checkWinner2 != 2 &&
+                            checkWinner2 != 0
                         ) {
-                            var randomNumber = randomPlayer();
-                            console.log("random number first", randomNumber);
                             while (_boardArray[randomNumber] != " ") {
                                 randomNumber = randomPlayer();
-                                console.log(
-                                    "random number second",
-                                    randomNumber
-                                );
+                                // console.log("ranodm number ", randomNumber);
                             }
-                            let selectedCell =
-                                document.getElementById(randomNumber);
-                            selectedCell.textContent = currentPlayer;
-                            _boardArray[randomNumber] = currentPlayer;
-                            checkIfWin();
-                            let checkWinner = displayWinner();
-                            switchPlayerColorAndCurrentPlayer();
-                            // console.log(displayWinner());
-                            if (checkWinner === 1) {
-                                plX.setGamesWon();
-                            } else if (checkWinner === 2) {
-                                plO.setGamesWon();
-                            }
+                            //  i dalje gazi preko postojecih X-eva
                         }
+                        let selectedCell =
+                            document.getElementById(randomNumber);
+                        selectedCell.textContent = currentPlayer;
+                        _boardArray[randomNumber] = currentPlayer;
+                        checkIfWin();
+                        let checkWinner = displayWinner();
+                        switchPlayerColor();
+                        // console.log(displayWinner());
+                        if (checkWinner === 1) {
+                            plX.setGamesWon();
+                        } else if (checkWinner === 2) {
+                            plO.setGamesWon();
+                        }
+                        // console.log(plX.getName(), " score ", plX.getGamesWon());
+                        // console.log(plO.getName(), " score ", plO.getGamesWon());
+                        // if (
+                        //     _boardArray[randomNumber] === "X" ||
+                        //     _boardArray[randomNumber] === "O"
+                        // ) {
+                        // }
                     }
                 };
             }
@@ -259,10 +212,6 @@ var gameboard = (function () {
             let rand = getRandomInt(9);
             return rand;
         }
-    }
-    function tableColorAfterWin() {
-        table.style.backgroundColor = "#717b7a";
-        table.style.borderRadius = "10px";
     }
 
     function effectHoverOverCell(i) {
@@ -276,7 +225,7 @@ var gameboard = (function () {
         });
     }
 
-    function switchPlayerColorAndCurrentPlayer() {
+    function switchPlayerColor() {
         if (currentPlayer === plOne) {
             plOneArea.style.backgroundColor = "#d8e5d8";
             plTwoArea.style.backgroundColor = "#717b7a";
@@ -292,23 +241,29 @@ var gameboard = (function () {
         if (winnerOneOrTwo === plOne) {
             playerOneScore++;
             plOneScore.textContent = playerOneScore;
+            // alert('would you like to play again');
             declareWinner.textContent = "Winner is " + plOne;
             return 1;
+            // setBoard();
         } else if (winnerOneOrTwo === plTwo) {
             playerTwoScore++;
             plTwoScore.textContent = playerTwoScore;
             declareWinner.textContent = "Winner is " + plTwo;
+            // alert('would you like to play again');
+            // setBoard();
             return 2;
         } else if (winnerOneOrTwo === draw) {
             declareWinner.textContent = "Draw";
+            // alert('DRAW, would you like to play again');
+            // setBoard();
             return 0;
         }
     }
-    // function play() {
-    //     let showPlayerOne = document.getElementById("plOne");
-    //     let showPlayerTwo = document.getElementById("plTwo");
-    //     showPlayerOne.style.backgroundColor = "lightblue";
-    // }
+    function play() {
+        let showPlayerOne = document.getElementById("plOne");
+        let showPlayerTwo = document.getElementById("plTwo");
+        showPlayerOne.style.backgroundColor = "lightblue";
+    }
 
     function getBoardPosStatus(x) {
         console.log(_boardArray[8]);
@@ -358,7 +313,6 @@ var gameboard = (function () {
             } else {
                 winnerOneOrTwo = plTwo;
             }
-            lines.lineHor02();
             console.log("winner is " + winnerOneOrTwo);
         } else if (
             " " != _boardArray[3] &&
@@ -370,7 +324,6 @@ var gameboard = (function () {
             } else {
                 winnerOneOrTwo = plTwo;
             }
-            lines.lineHor35();
             console.log("winner is " + winnerOneOrTwo);
         } else if (
             " " != _boardArray[6] &&
@@ -382,7 +335,6 @@ var gameboard = (function () {
             } else {
                 winnerOneOrTwo = plTwo;
             }
-            lines.lineHor68();
             console.log("winner is " + winnerOneOrTwo);
         } else if (
             " " != _boardArray[0] &&
@@ -394,7 +346,6 @@ var gameboard = (function () {
             } else {
                 winnerOneOrTwo = plTwo;
             }
-            lines.lineVer06();
             console.log("winner is " + winnerOneOrTwo);
         } else if (
             " " != _boardArray[1] &&
@@ -406,7 +357,6 @@ var gameboard = (function () {
             } else {
                 winnerOneOrTwo = plTwo;
             }
-            lines.lineVer17();
             console.log("winner is " + winnerOneOrTwo);
         } else if (
             " " != _boardArray[2] &&
@@ -418,7 +368,6 @@ var gameboard = (function () {
             } else {
                 winnerOneOrTwo = plTwo;
             }
-            lines.lineVer28();
             console.log("winner is " + winnerOneOrTwo);
         } else if (
             " " != _boardArray[0] &&
@@ -430,7 +379,6 @@ var gameboard = (function () {
             } else {
                 winnerOneOrTwo = plTwo;
             }
-            lines.lineX08();
             console.log("winner is " + winnerOneOrTwo);
         } else if (
             " " != _boardArray[2] &&
@@ -442,7 +390,6 @@ var gameboard = (function () {
             } else {
                 winnerOneOrTwo = plTwo;
             }
-            lines.lineX26();
             console.log("winner is " + winnerOneOrTwo);
         } else if (checking === 1) {
             console.log("checkAllPos");

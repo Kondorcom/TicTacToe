@@ -20,7 +20,7 @@
                         type="text"
                         id="plOneName"
                         name="plOneName"
-                        autocomplete="off"
+                        autocomplete="on"
                     />
                 </div>
                 <div>
@@ -29,6 +29,10 @@
                 </div>
             </div>
             <div class="center">
+                <canvas id="myCanvas" width="320" height="320">
+                    Your browser does not support the HTML5 canvas tag.</canvas
+                >
+                <!-- <div id="myCanvas"></div> -->
                 <table id="gameBoardTable">
                     <tr>
                         <td id="0"></td>
@@ -49,12 +53,8 @@
             </div>
             <div id="plTwo">
                 <div class="playerName">
-                    <input
-                        type="text"
-                        id="plTwoName"
-                        name="plTwoName"
-                        autocomplete="off"
-                    />
+                    <input type="text" id="plTwoName" name="plTwoName"
+                    autocomplete=on" />
                 </div>
                 <div>
                     <h3>O score</h3>
