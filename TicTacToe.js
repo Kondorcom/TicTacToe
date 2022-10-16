@@ -13,20 +13,9 @@ const Player = (name, sign) => {
     const setGamesWon = () => {
         gamesWon++;
     };
-    // const playedPosition = x =>{
-    //     playedPosition[x] = 1;
-    // }
 
     return { setGamesWon, getGamesWon, getName, getSign };
 };
-
-//   const playerX = Player('X');
-//   const playerO = Player('O');
-
-//   console.log(playerX.getName());
-//   console.log(playerX.getGamesWon());
-//   playerX.setGamesWon();
-//   console.log(playerX.getGamesWon());
 
 var gameboard = (function () {
     "use strict";
@@ -54,6 +43,8 @@ var gameboard = (function () {
     let playerX = Player();
     let playerO = Player();
 
+    let pcPlayer;
+
     let winnerOneOrTwo = "I";
     // let restartButton = document.getElementById("restartButton");
     let startButton = document.getElementById("startButton");
@@ -63,10 +54,11 @@ var gameboard = (function () {
     startButton.addEventListener("click", startGame);
 
     function startGame() {
-        console.log("start or restart game");
+        // console.log("start or restart game");
         if (startButton.innerHTML === "Start game") {
             let playerXname = document.getElementById("plOneName").value;
             let playerOname = document.getElementById("plTwoName").value;
+            pcPlayer = playerOname;
             // console.log(playerXname);
 
             playerX = Player(playerXname, "X");
@@ -83,70 +75,151 @@ var gameboard = (function () {
         }
     }
 
-    // function restartGame(){
-    //     console.log('restart game');
-    //     declareWinner.innerHTML = ' ';
-    //     drawXO();
-    //     // setBoard();
-    // }
-
-    // function setBoard(){
-
-    //     for (var i=0; i<9; i++){
+    // function drawXO(plX, plO) {
+    //     for (var i = 0; i < 9; i++) {
     //         _boardArray[i] = 0;
-    //         document.getElementById(i).bgColor = '#f8f8f8';
-    //         document.getElementById(i).innerText = ' ';
-
+    //         document.getElementById(i).bgColor = "#f8f8f8";
+    //         document.getElementById(i).innerText = " ";
     //     }
-    //     winnerOneOrTwo = 'unknown';
-    //     drawXO();
-    // }
 
+    //     winnerOneOrTwo = "unknown";
+    //     currentPlayer = plOne;
+    //     plOneArea.style.backgroundColor = "#717b7a";
+
+    //     for (let i = 0; i < 9; i++) {
+    //         effectHoverOverCell(i); // when hovering over cell changes color
+
+    //         document.getElementById(i).onclick = function () {
+    //             let selectedCell = document.getElementById(i);
+
+    //             if (
+    //                 selectedCell.textContent === " " &&
+    //                 declareWinner.textContent === " "
+    //             ) {
+    //                 selectedCell.textContent = currentPlayer;
+    //                 _boardArray[i] = currentPlayer;
+    //                 displayAllPositions();
+    //                 switchPlayerColor(); //changes current player
+    //                 checkIfWin(); // goes through the board and makes a check to see if there is a winner
+    //                 let checkWinner = displayWinner();
+    //                 // console.log(displayWinner());
+    //                 if (checkWinner === 1) {
+    //                     plX.setGamesWon();
+    //                 } else if (checkWinner === 2) {
+    //                     plO.setGamesWon();
+    //                 }
+    //                 console.log(plX.getName(), " score ", plX.getGamesWon());
+    //                 console.log(plO.getName(), " score ", plO.getGamesWon());
+    //             } else {
+    //                 console.log("x should change to empty");
+    //             }
+    //         };
+    //         document.getElementById(i).onmouseup = function () {
+    //             console.log("haha mouseup");
+
+    //         };
+    //     }
     function drawXO(plX, plO) {
         for (var i = 0; i < 9; i++) {
             _boardArray[i] = 0;
             document.getElementById(i).bgColor = "#f8f8f8";
             document.getElementById(i).innerText = " ";
         }
-
-        // console.log(plX.getName());
-        // console.log(plX.getGamesWon());
-        // // playerX.setGamesWon();
-        // console.log(plX.getSign());
+        var checkWinner;
         winnerOneOrTwo = "unknown";
-
         currentPlayer = plOne;
         plOneArea.style.backgroundColor = "#717b7a";
 
         for (let i = 0; i < 9; i++) {
+            let playerUser = 0;
             effectHoverOverCell(i); // when hovering over cell changes color
 
-            document.getElementById(i).onclick = function () {
+            document.getElementById(i).onmousedown = function () {
+                console.log("on click");
                 let selectedCell = document.getElementById(i);
 
                 if (
                     selectedCell.textContent === " " &&
                     declareWinner.textContent === " "
                 ) {
+                    // console.log("current player ", currentPlayer);
                     selectedCell.textContent = currentPlayer;
                     _boardArray[i] = currentPlayer;
+                    // displayAllPositions();
                     switchPlayerColor(); //changes current player
                     checkIfWin(); // goes through the board and makes a check to see if there is a winner
-                    let checkWinner = displayWinner();
+                    checkWinner = displayWinner();
                     // console.log(displayWinner());
                     if (checkWinner === 1) {
                         plX.setGamesWon();
                     } else if (checkWinner === 2) {
                         plO.setGamesWon();
                     }
-                    console.log(plX.getName(), " score ", plX.getGamesWon());
-                    console.log(plO.getName(), " score ", plO.getGamesWon());
+                    // console.log(plX.getName(), " score ", plX.getGamesWon());
+                    // console.log(plO.getName(), " score ", plO.getGamesWon());
                 } else {
-                    console.log("x should change to empty");
+                    playerUser = 1;
+                    console.log("x should change to empty", playerUser);
                 }
             };
+
+            if (pcPlayer === "PC") {
+                document.getElementById(i).onmouseup = function () {
+                    if (playerUser != 1) {
+                        console.log("mouseup player user", playerUser);
+                        console.log("mouseup");
+
+                        // let checkWinner2 = displayWinner();
+                        if (
+                            checkWinner != 1 &&
+                            checkWinner != 2 &&
+                            checkWinner != 0
+                        ) {
+                            var randomNumber = randomPlayer();
+                            console.log("random number first", randomNumber);
+                            while (_boardArray[randomNumber] != " ") {
+                                randomNumber = randomPlayer();
+                                console.log(
+                                    "random number second",
+                                    randomNumber
+                                );
+                            }
+                            //  i dalje gazi preko postojecih X-eva
+                            let selectedCell =
+                                document.getElementById(randomNumber);
+                            selectedCell.textContent = currentPlayer;
+                            _boardArray[randomNumber] = currentPlayer;
+                            checkIfWin();
+                            let checkWinner = displayWinner();
+                            switchPlayerColor();
+                            // console.log(displayWinner());
+                            if (checkWinner === 1) {
+                                plX.setGamesWon();
+                            } else if (checkWinner === 2) {
+                                plO.setGamesWon();
+                            }
+                        }
+
+                        // console.log(plX.getName(), " score ", plX.getGamesWon());
+                        // console.log(plO.getName(), " score ", plO.getGamesWon());
+                        // if (
+                        //     _boardArray[randomNumber] === "X" ||
+                        //     _boardArray[randomNumber] === "O"
+                        // ) {
+                        // }
+                    }
+                };
+            }
+        }
+        function randomPlayer() {
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+            }
+            let rand = getRandomInt(9);
+            return rand;
         }
     }
+
     function effectHoverOverCell(i) {
         document.getElementById(i).addEventListener("mouseover", function () {
             this.style.backgroundColor = "#717b7a";
@@ -208,14 +281,12 @@ var gameboard = (function () {
     }
     function checkAllPositions() {
         let check = 0;
-        // console.log('checkPos');
         for (var i = 0; i < 9; i++) {
-            // console.log(i,'===',_boardArray[i]);
             if (_boardArray[i] == " ") {
                 check++;
             }
         }
-        // console.log(check);
+
         if (check === 0) {
             return 1;
         } else {
@@ -337,50 +408,3 @@ var gameboard = (function () {
         drawXO: drawXO,
     };
 })();
-//   gameboard.setBoard();
-
-// const Player = (name) => {
-//         // let health = level * 2;
-//         // const getLevel = () => level;
-
-//         const getName  = () => name;
-
-//         // let playedPositions = [];
-//         const gamesWon = 0;
-//         const addGamesWon = () => {
-//             gamesWon ++;
-//         }
-//         // const playedPosition = x =>{
-//         //     playedPosition[x] = 1;
-//         // }
-
-//         return {attack, damage, getLevel, getName};
-//       };
-
-//   const Player = (name) => {
-//     // let health = level * 2;
-//     // const getLevel = () => level;
-//     const getName  = () => name;
-//     let playedPositions = [];
-
-//     const die = () => {
-//       // uh oh
-//     };
-//     const damage = x => {
-//       health -= x;
-//       if (health <= 0) {
-//         die();
-//       }
-//     };
-//     const attack = enemy => {
-//       if (level < enemy.getLevel()) {
-//         damage(1);
-//         console.log(`${enemy.getName()} has damaged ${name}`);
-//       }
-//       if (level >= enemy.getLevel()) {
-//         enemy.damage(1);
-//         console.log(`${name} has damaged ${enemy.getName()}`);
-//       }
-//     };
-//     return {attack, damage, getLevel, getName};
-//   };
