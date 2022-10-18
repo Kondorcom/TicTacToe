@@ -111,14 +111,20 @@ const drawWinnerLine = () => {
 
 var gameboard = (function () {
     "use strict";
-    let board = [
-        [" ", " ", " "],
-        [" ", " ", " "],
-        [" ", " ", " "],
-    ];
+    // let board = [
+    //     [" ", " ", " "],
+    //     [" ", " ", " "],
+    //     [" ", " ", " "],
+    // ];
+    // let board = [
+    //     ["X", "O", "X"],
+    //     ["O", "O", "X"],
+    //     [" ", " ", " "],
+    // ];
     const table = document.getElementById("gameBoardTable");
     let lines = drawWinnerLine();
-    var _boardArray = [];
+    // var _boardArray = [];
+    var _boardArray = ["X", "O", "X", "O", "O", "X", " ", " ", " "];
 
     let playerOneScore = 0;
     let playerTwoScore = 0;
@@ -197,7 +203,7 @@ var gameboard = (function () {
                 ) {
                     selectedCell.textContent = currentPlayer;
                     _boardArray[i] = currentPlayer;
-                    // displayAllPositions();
+                    //
                     switchPlayerColorAndCurrentPlayer(); //changes current player
                     checkIfWin(); // goes through the board and makes a check to see if there is a winner
                     checkWinner = displayWinner();
@@ -326,20 +332,121 @@ var gameboard = (function () {
             }
         }
 
-        if (check === 0) {
-            return 1;
-        } else {
-            return 0;
+        if (check != 0) {
+            return true;
         }
+        return false;
     }
     let checking = checkAllPositions();
 
-    function playerOneMove(x) {
-        _boardArray[x] = "X";
+    function minimax(depth, isMax) {
+        let score = checkIfWin();
+
+        if (score == 10) return score;
+        if (score == -10) return score;
+        if (checkAllPositions() == false) return 0;
+
+        if (isMax) {
+            let best = -1000;
+
+            for (let i = 0; i < 9; i++) {
+                if (_boardArray[i] == " ") {
+                    _boardArray[i] = plOne;
+
+                    best = Math.max(best, minimax(depth + 1, !isMax));
+
+                    _boardArray[i] = " ";
+                }
+            }
+            return best;
+        } else {
+            let best = 1000;
+
+            for (let i = 0; i < 9; i++) {
+                if (_boardArray[i] == " ") {
+                    _boardArray[i] = plTwo;
+
+                    best = Math.min(best, minimax(depth + 1, !isMax));
+
+                    console.log("best minimax opponent", best);
+                    _boardArray[i] = " ";
+                }
+            }
+            return best;
+        }
     }
-    function playerTwoMove(x) {
-        _boardArray[x] = "O";
+
+    function findBestMove() {
+        let bestVal = -1000;
+        // let bestMove = new Move();
+        // bestMove.row = -1;
+        // bestMove.col = -1;
+        console.log("find best move");
+        let bestMoveMarko = -1;
+        for (let i = 0; i < 9; i++) {
+            if (_boardArray[i] == " ") {
+                _boardArray[i] = plOne;
+                let moveVal = minimax(0, false);
+                console.log("moveVal", moveVal);
+
+                _boardArray[i] = " ";
+
+                if (moveVal > bestVal) {
+                    console.log("bestVal", bestVal);
+                    bestMoveMarko = i;
+                    bestVal = moveVal;
+                    console.log("bestMoveMarko", bestMoveMarko);
+                    console.log("bestVal", bestVal);
+                    // displayAllPositions();
+                }
+            }
+        }
+        document.write(
+            "The value of the best Move " + "is : ",
+            bestVal + "<br><br>"
+        );
+
+        return bestMoveMarko;
     }
+    function findBestMoveO() {
+        let bestVal = 1000;
+        // let bestMove = new Move();
+        // bestMove.row = -1;
+        // bestMove.col = -1;
+        console.log("find best move");
+        let bestMoveO = 1;
+        for (let i = 0; i < 9; i++) {
+            if (_boardArray[i] == " ") {
+                _boardArray[i] = plTwo;
+                let moveVal = minimax(0, true);
+                console.log("moveVal", moveVal);
+
+                _boardArray[i] = " ";
+
+                if (moveVal < bestVal) {
+                    console.log("bestVal", bestVal);
+                    bestMoveO = i;
+                    bestVal = moveVal;
+                    console.log("bestMoveO", bestMoveO);
+                    console.log("bestVal", bestVal);
+                    // displayAllPositions();
+                }
+            }
+        }
+        document.write(
+            "The value of the best Move " + "is : ",
+            bestVal + "<br><br>"
+        );
+
+        return bestMoveO;
+    }
+
+    let bestMove = findBestMove();
+    let bestMoveO = findBestMoveO();
+    document.write("The Optimal Move is :<br>");
+    document.write("best move X: ", bestMove + "<br>");
+    document.write("best move O: ", bestMoveO);
+    // document.write("ROW: " + bestMove.row + " COL: " + bestMove.col + "<br>");
     function checkIfPosIsUsed(x) {
         if (_boardArray[x] != 0) {
             console.log("position already played, choose again");
@@ -355,11 +462,15 @@ var gameboard = (function () {
         ) {
             if (_boardArray[0] === plOne) {
                 winnerOneOrTwo = plOne;
+                lines.lineHor02();
+                return +10;
             } else {
                 winnerOneOrTwo = plTwo;
+                lines.lineHor02();
+                return -10;
             }
-            lines.lineHor02();
-            console.log("winner is " + winnerOneOrTwo);
+            // lines.lineHor02();
+            // console.log("winner is " + winnerOneOrTwo);
         } else if (
             " " != _boardArray[3] &&
             _boardArray[3] === _boardArray[4] &&
@@ -367,8 +478,14 @@ var gameboard = (function () {
         ) {
             if (_boardArray[3] === plOne) {
                 winnerOneOrTwo = plOne;
+                lines.lineHor35();
+                console.log("winner is " + winnerOneOrTwo);
+                return +10;
             } else {
                 winnerOneOrTwo = plTwo;
+                lines.lineHor35();
+                console.log("winner is " + winnerOneOrTwo);
+                return -10;
             }
             lines.lineHor35();
             console.log("winner is " + winnerOneOrTwo);
@@ -379,8 +496,12 @@ var gameboard = (function () {
         ) {
             if (_boardArray[6] === plOne) {
                 winnerOneOrTwo = plOne;
+                lines.lineHor68();
+                return +10;
             } else {
                 winnerOneOrTwo = plTwo;
+                lines.lineHor68();
+                return -10;
             }
             lines.lineHor68();
             console.log("winner is " + winnerOneOrTwo);
@@ -391,8 +512,12 @@ var gameboard = (function () {
         ) {
             if (_boardArray[0] === plOne) {
                 winnerOneOrTwo = plOne;
+                lines.lineVer06();
+                return +10;
             } else {
                 winnerOneOrTwo = plTwo;
+                lines.lineVer06();
+                return -10;
             }
             lines.lineVer06();
             console.log("winner is " + winnerOneOrTwo);
@@ -403,8 +528,13 @@ var gameboard = (function () {
         ) {
             if (_boardArray[1] === plOne) {
                 winnerOneOrTwo = plOne;
+                lines.lineVer17();
+                return +10;
             } else {
                 winnerOneOrTwo = plTwo;
+                lines.lineVer17();
+                // console.log("winner 0");
+                return -10;
             }
             lines.lineVer17();
             console.log("winner is " + winnerOneOrTwo);
@@ -415,8 +545,12 @@ var gameboard = (function () {
         ) {
             if (_boardArray[2] === plOne) {
                 winnerOneOrTwo = plOne;
+                lines.lineVer28();
+                return +10;
             } else {
                 winnerOneOrTwo = plTwo;
+                lines.lineVer28();
+                return -10;
             }
             lines.lineVer28();
             console.log("winner is " + winnerOneOrTwo);
@@ -427,8 +561,12 @@ var gameboard = (function () {
         ) {
             if (_boardArray[0] === plOne) {
                 winnerOneOrTwo = plOne;
+                lines.lineX08();
+                return +10;
             } else {
                 winnerOneOrTwo = plTwo;
+                lines.lineX08();
+                return -10;
             }
             lines.lineX08();
             console.log("winner is " + winnerOneOrTwo);
@@ -439,14 +577,19 @@ var gameboard = (function () {
         ) {
             if (_boardArray[2] === plOne) {
                 winnerOneOrTwo = plOne;
+                lines.lineX26();
+                return +10;
             } else {
                 winnerOneOrTwo = plTwo;
+                lines.lineX26();
+                return -10;
             }
             lines.lineX26();
             console.log("winner is " + winnerOneOrTwo);
-        } else if (checking === 1) {
+        } else if (checking === false) {
             console.log("checkAllPos");
             winnerOneOrTwo = draw;
+            return 0;
         }
         // console.log(checking);
     }
