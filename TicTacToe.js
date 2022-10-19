@@ -36,7 +36,7 @@ const drawWinnerLine = () => {
         ctx.moveTo(0, 53);
         ctx.lineTo(320, 53);
         ctx.stroke();
-        console.log("returning ctx");
+
         return ctx;
     };
     const lineHor35 = () => {
@@ -44,7 +44,7 @@ const drawWinnerLine = () => {
         ctx.moveTo(0, 159);
         ctx.lineTo(320, 159);
         ctx.stroke();
-        console.log("returning ctx");
+
         return ctx;
     };
     const lineHor68 = () => {
@@ -52,7 +52,7 @@ const drawWinnerLine = () => {
         ctx.moveTo(0, 267);
         ctx.lineTo(320, 267);
         ctx.stroke();
-        console.log("returning ctx");
+
         return ctx;
     };
     const lineVer06 = () => {
@@ -60,7 +60,7 @@ const drawWinnerLine = () => {
         ctx.moveTo(53, 0);
         ctx.lineTo(52, 320);
         ctx.stroke();
-        console.log("returning ctx");
+
         return ctx;
     };
     const lineVer17 = () => {
@@ -68,7 +68,7 @@ const drawWinnerLine = () => {
         ctx.moveTo(159, 0);
         ctx.lineTo(159, 320);
         ctx.stroke();
-        console.log("returning ctx");
+
         return ctx;
     };
     const lineVer28 = () => {
@@ -76,7 +76,7 @@ const drawWinnerLine = () => {
         ctx.moveTo(267, 0);
         ctx.lineTo(267, 320);
         ctx.stroke();
-        console.log("returning ctx");
+
         return ctx;
     };
     const lineX08 = () => {
@@ -84,7 +84,7 @@ const drawWinnerLine = () => {
         ctx.moveTo(0, 0);
         ctx.lineTo(320, 320);
         ctx.stroke();
-        console.log("returning ctx");
+
         return ctx;
     };
     const lineX26 = () => {
@@ -92,7 +92,7 @@ const drawWinnerLine = () => {
         ctx.moveTo(320, 0);
         ctx.lineTo(0, 320);
         ctx.stroke();
-        console.log("returning ctx");
+
         return ctx;
     };
 
@@ -123,8 +123,8 @@ var gameboard = (function () {
     // ];
     const table = document.getElementById("gameBoardTable");
     let lines = drawWinnerLine();
-    // var _boardArray = [];
-    var _boardArray = ["X", "O", "X", "O", "O", "X", " ", " ", " "];
+    var _boardArray = [];
+    // var _boardArray = ["X", "O", "X", "O", "O", "X", " ", " ", " "];
 
     let playerOneScore = 0;
     let playerTwoScore = 0;
@@ -194,7 +194,7 @@ var gameboard = (function () {
             let playerUser = 0;
             effectHoverOverCell(i); // when hovering over cell changes color
             document.getElementById(i).onmousedown = function () {
-                console.log("on click");
+                // console.log("on click");
                 let selectedCell = document.getElementById(i);
 
                 if (
@@ -213,37 +213,44 @@ var gameboard = (function () {
                     } else if (checkWinner === 2) {
                         plO.setGamesWon();
                     }
-                    // console.log(plX.getName(), " score ", plX.getGamesWon());
-                    // console.log(plO.getName(), " score ", plO.getGamesWon());
                 } else {
                     playerUser = 1;
-                    console.log("x should change to empty", playerUser);
+                    // console.log("x should change to empty", playerUser);
                 }
             };
 
-            if (pcPlayer === "PC") {
+            if (
+                pcPlayer === "PCmaster" ||
+                pcPlayer === "PCnovice" ||
+                pcPlayer === "PChard"
+            ) {
                 document.getElementById(i).onmouseup = function () {
                     if (playerUser != 1) {
-                        console.log("mouseup player user", playerUser);
-                        console.log("mouseup");
                         if (
                             checkWinner != 1 &&
                             checkWinner != 2 &&
                             checkWinner != 0
                         ) {
-                            var randomNumber = randomPlayer();
-                            console.log("random number first", randomNumber);
-                            while (_boardArray[randomNumber] != " ") {
-                                randomNumber = randomPlayer();
-                                console.log(
-                                    "random number second",
-                                    randomNumber
-                                );
+                            if (pcPlayer === "PCmaster") {
+                                let bestMoveO = findBestMoveO();
+                                let selectedCell =
+                                    document.getElementById(bestMoveO);
+                                selectedCell.textContent = currentPlayer;
+                                _boardArray[bestMoveO] = currentPlayer;
+                            } else if (pcPlayer === "PCnovice") {
+                                let noviceMoveO = findNoviceMoveO();
+                                let selectedCell =
+                                    document.getElementById(noviceMoveO);
+                                selectedCell.textContent = currentPlayer;
+                                _boardArray[noviceMoveO] = currentPlayer;
+                            } else if (pcPlayer === "PChard") {
+                                let hardMoveO = findHardMoveO();
+                                let selectedCell =
+                                    document.getElementById(hardMoveO);
+                                selectedCell.textContent = currentPlayer;
+                                _boardArray[hardMoveO] = currentPlayer;
                             }
-                            let selectedCell =
-                                document.getElementById(randomNumber);
-                            selectedCell.textContent = currentPlayer;
-                            _boardArray[randomNumber] = currentPlayer;
+
                             checkIfWin();
                             let checkWinner = displayWinner();
                             switchPlayerColorAndCurrentPlayer();
@@ -257,13 +264,6 @@ var gameboard = (function () {
                     }
                 };
             }
-        }
-        function randomPlayer() {
-            function getRandomInt(max) {
-                return Math.floor(Math.random() * max);
-            }
-            let rand = getRandomInt(9);
-            return rand;
         }
     }
     function tableColorAfterWin() {
@@ -310,11 +310,6 @@ var gameboard = (function () {
             return 0;
         }
     }
-    // function play() {
-    //     let showPlayerOne = document.getElementById("plOne");
-    //     let showPlayerTwo = document.getElementById("plTwo");
-    //     showPlayerOne.style.backgroundColor = "lightblue";
-    // }
 
     function getBoardPosStatus(x) {
         console.log(_boardArray[8]);
@@ -340,35 +335,28 @@ var gameboard = (function () {
     let checking = checkAllPositions();
 
     function minimax(depth, isMax) {
-        let score = checkIfWin();
-
+        let score = checkIfWinScore();
         if (score == 10) return score;
         if (score == -10) return score;
         if (checkAllPositions() == false) return 0;
-
         if (isMax) {
             let best = -1000;
 
             for (let i = 0; i < 9; i++) {
                 if (_boardArray[i] == " ") {
                     _boardArray[i] = plOne;
-
                     best = Math.max(best, minimax(depth + 1, !isMax));
-
                     _boardArray[i] = " ";
                 }
             }
             return best;
         } else {
             let best = 1000;
-
             for (let i = 0; i < 9; i++) {
                 if (_boardArray[i] == " ") {
                     _boardArray[i] = plTwo;
-
                     best = Math.min(best, minimax(depth + 1, !isMax));
 
-                    console.log("best minimax opponent", best);
                     _boardArray[i] = " ";
                 }
             }
@@ -376,77 +364,87 @@ var gameboard = (function () {
         }
     }
 
-    function findBestMove() {
-        let bestVal = -1000;
-        // let bestMove = new Move();
-        // bestMove.row = -1;
-        // bestMove.col = -1;
-        console.log("find best move");
-        let bestMoveMarko = -1;
-        for (let i = 0; i < 9; i++) {
-            if (_boardArray[i] == " ") {
-                _boardArray[i] = plOne;
-                let moveVal = minimax(0, false);
-                console.log("moveVal", moveVal);
+    // function findBestMove() {
+    //     let bestVal = -1000;
+    //     let bestMovePlOne = -1;
+    //     for (let i = 0; i < 9; i++) {
+    //         if (_boardArray[i] == " ") {
+    //             _boardArray[i] = plOne;
+    //             let moveVal = minimax(0, false);
+    //             _boardArray[i] = " ";
+    //             if (moveVal > bestVal) {
+    //                 bestMovePlOne = i;
+    //                 bestVal = moveVal;
+    //             }
+    //         }
+    //     }
 
-                _boardArray[i] = " ";
-
-                if (moveVal > bestVal) {
-                    console.log("bestVal", bestVal);
-                    bestMoveMarko = i;
-                    bestVal = moveVal;
-                    console.log("bestMoveMarko", bestMoveMarko);
-                    console.log("bestVal", bestVal);
-                    // displayAllPositions();
-                }
-            }
+    //     return bestMovePlOne;
+    // }
+    function findNoviceMoveO() {
+        let randomNumber = randomPlayer();
+        // console.log("random number first", randomNumber);
+        const value = Math.floor(Math.random() * (100 + 1));
+        if (value <= 65) {
+            let bestMoveO = findBestMoveO();
+            // console.log("best move");
+            console.log("value", value);
+            return bestMoveO;
         }
-        document.write(
-            "The value of the best Move " + "is : ",
-            bestVal + "<br><br>"
-        );
 
-        return bestMoveMarko;
+        while (_boardArray[randomNumber] != " ") {
+            randomNumber = randomPlayer();
+        }
+        function randomPlayer() {
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+            }
+            let rand = getRandomInt(9);
+            return rand;
+        }
+        return randomNumber;
+    }
+    function findHardMoveO() {
+        let randomNumber = randomPlayer();
+        // console.log("random number first", randomNumber);
+        const value = Math.floor(Math.random() * (100 + 1));
+        if (value <= 85) {
+            let bestMoveO = findBestMoveO();
+            // console.log("value", value);
+            console.log("best move", value);
+            return bestMoveO;
+        }
+        while (_boardArray[randomNumber] != " ") {
+            randomNumber = randomPlayer();
+        }
+
+        function randomPlayer() {
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+            }
+            let rand = getRandomInt(9);
+            return rand;
+        }
+        return randomNumber;
     }
     function findBestMoveO() {
         let bestVal = 1000;
-        // let bestMove = new Move();
-        // bestMove.row = -1;
-        // bestMove.col = -1;
-        console.log("find best move");
         let bestMoveO = 1;
         for (let i = 0; i < 9; i++) {
             if (_boardArray[i] == " ") {
                 _boardArray[i] = plTwo;
                 let moveVal = minimax(0, true);
-                console.log("moveVal", moveVal);
-
                 _boardArray[i] = " ";
-
                 if (moveVal < bestVal) {
-                    console.log("bestVal", bestVal);
                     bestMoveO = i;
                     bestVal = moveVal;
-                    console.log("bestMoveO", bestMoveO);
-                    console.log("bestVal", bestVal);
-                    // displayAllPositions();
                 }
             }
         }
-        document.write(
-            "The value of the best Move " + "is : ",
-            bestVal + "<br><br>"
-        );
 
         return bestMoveO;
     }
 
-    let bestMove = findBestMove();
-    let bestMoveO = findBestMoveO();
-    document.write("The Optimal Move is :<br>");
-    document.write("best move X: ", bestMove + "<br>");
-    document.write("best move O: ", bestMoveO);
-    // document.write("ROW: " + bestMove.row + " COL: " + bestMove.col + "<br>");
     function checkIfPosIsUsed(x) {
         if (_boardArray[x] != 0) {
             console.log("position already played, choose again");
@@ -589,6 +587,92 @@ var gameboard = (function () {
         } else if (checking === false) {
             console.log("checkAllPos");
             winnerOneOrTwo = draw;
+            return 0;
+        }
+        // console.log(checking);
+    }
+    function checkIfWinScore() {
+        let checking = checkAllPositions();
+        if (
+            " " != _boardArray[0] &&
+            _boardArray[0] === _boardArray[1] &&
+            _boardArray[1] === _boardArray[2]
+        ) {
+            if (_boardArray[0] === plOne) {
+                return +10;
+            } else {
+                return -10;
+            }
+        } else if (
+            " " != _boardArray[3] &&
+            _boardArray[3] === _boardArray[4] &&
+            _boardArray[4] === _boardArray[5]
+        ) {
+            if (_boardArray[3] === plOne) {
+            } else {
+                return -10;
+            }
+        } else if (
+            " " != _boardArray[6] &&
+            _boardArray[6] === _boardArray[7] &&
+            _boardArray[7] === _boardArray[8]
+        ) {
+            if (_boardArray[6] === plOne) {
+                return +10;
+            } else {
+                return -10;
+            }
+        } else if (
+            " " != _boardArray[0] &&
+            _boardArray[0] === _boardArray[3] &&
+            _boardArray[3] === _boardArray[6]
+        ) {
+            if (_boardArray[0] === plOne) {
+                return +10;
+            } else {
+                return -10;
+            }
+        } else if (
+            " " != _boardArray[1] &&
+            _boardArray[1] === _boardArray[4] &&
+            _boardArray[4] === _boardArray[7]
+        ) {
+            if (_boardArray[1] === plOne) {
+                return +10;
+            } else {
+                return -10;
+            }
+        } else if (
+            " " != _boardArray[2] &&
+            _boardArray[2] === _boardArray[5] &&
+            _boardArray[5] === _boardArray[8]
+        ) {
+            if (_boardArray[2] === plOne) {
+                return +10;
+            } else {
+                return -10;
+            }
+        } else if (
+            " " != _boardArray[0] &&
+            _boardArray[0] === _boardArray[4] &&
+            _boardArray[4] === _boardArray[8]
+        ) {
+            if (_boardArray[0] === plOne) {
+                return +10;
+            } else {
+                return -10;
+            }
+        } else if (
+            " " != _boardArray[2] &&
+            _boardArray[2] === _boardArray[4] &&
+            _boardArray[4] === _boardArray[6]
+        ) {
+            if (_boardArray[2] === plOne) {
+                return +10;
+            } else {
+                return -10;
+            }
+        } else if (checking === false) {
             return 0;
         }
         // console.log(checking);
